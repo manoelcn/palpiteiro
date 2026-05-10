@@ -1,0 +1,9 @@
+<html>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <p>Tem certeza que quer sair desse grupo?</p>
+        <button type="submit">Sim</button>
+    </form>
+</html>

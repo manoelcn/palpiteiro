@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
+from django.views.generic.edit import FormView
 from groups.models import Group, Membership
-from groups.forms import GroupForm
+from groups.forms import GroupForm, InviteCodeForm
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
@@ -25,3 +26,18 @@ class GroupListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Group.objects.filter(memberships__user=self.request.user)
+
+
+class GroupJoinView(LoginRequiredMixin, FormView):
+    template_name = 'group_join.html'
+    form_class = InviteCodeForm
+    success_url = reverse_lazy('group-list')
+
+    def form_valid(self, form):
+        try:
+            group = Group.objects.get(invite_code=form.cleaned_data['invite_code'])
+            Membership.objects.create(user=self.request.user, group=group)
+            return super().form_valid(form)
+        except Group.DoesNotExist:
+            form.add_error('invite_code', 'Código inválido.')
+            return self.form_invalid(form)

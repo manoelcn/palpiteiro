@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'groups',
     'guesses',
     'matches',
+    'core',
 ]
 
 MIDDLEWARE = [

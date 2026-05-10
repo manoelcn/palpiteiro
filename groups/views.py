@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DeleteView
 from django.views.generic.edit import FormView
 from groups.models import Group, Membership
 from groups.forms import GroupForm, InviteCodeForm
@@ -41,3 +41,12 @@ class GroupJoinView(LoginRequiredMixin, FormView):
         except Group.DoesNotExist:
             form.add_error('invite_code', 'Código inválido.')
             return self.form_invalid(form)
+
+
+class GroupLeaveView(LoginRequiredMixin, DeleteView):
+    model = Membership
+    template_name = 'group_delete.html'
+    success_url = reverse_lazy('group-list')
+
+    def get_queryset(self):
+        return Membership.objects.filter(user=self.request.user)

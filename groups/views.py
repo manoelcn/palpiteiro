@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from groups.models import Group
+from django.views.generic import CreateView, ListView
+from groups.models import Group, Membership
 from groups.forms import GroupForm
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
@@ -14,3 +14,12 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
+
+
+class GroupListView(LoginRequiredMixin, ListView):
+    model = Group
+    template_name = 'group_list.html'
+    context_object_name = 'groups'
+
+    def get_queryset(self):
+        return Group.objects.filter(memberships__user=self.request.user)

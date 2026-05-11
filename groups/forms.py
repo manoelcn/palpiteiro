@@ -5,7 +5,7 @@ from groups.models import Group
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = ['name']
+        fields = ['name', 'matches']
 
 
 class InviteCodeForm(forms.Form):

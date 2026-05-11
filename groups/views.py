@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
 from django.views.generic.edit import FormView
@@ -8,11 +8,12 @@ from groups.forms import GroupForm, InviteCodeForm
 from matches.models import Match
 from guesses.models import Guess
 
-class GroupCreateView(LoginRequiredMixin, CreateView):
+class GroupCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Group
     template_name = 'group_create.html'
     form_class = GroupForm
     success_url = reverse_lazy('group-list')
+    permission_required = 'groups.add_group'
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -68,11 +69,12 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class GroupUpdateView(LoginRequiredMixin, UpdateView):
+class GroupUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Group
     template_name = 'group_update.html'
     form_class = GroupForm
     success_url = reverse_lazy('group-list')
+    permission_required = 'groups.change_group'
 
     def get_queryset(self):
         return Group.objects.filter(owner=self.request.user)

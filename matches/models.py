@@ -15,3 +15,6 @@ class Match(models.Model):
     home_score = models.IntegerField(null=True)
     away_score = models.IntegerField(null=True)
     api_match_id = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.home_team} VS {self.away_team}"

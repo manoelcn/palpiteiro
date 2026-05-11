@@ -1,5 +1,19 @@
-<html>
-    <button><a href="#">Meus bolões</a></button>
-    <br>
-    <button><a href="#">Entrar em um novo bolão</a></button>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <h1 class="display-5 fw-bold mb-2">⚽ Bolão da Copa 2026</h1>
+        <p class="text-muted mb-5">Faça seus palpites e dispute com amigos e família!</p>
+
+        <div class="d-grid gap-3">
+            <a href="{% url 'group-list' %}" class="btn btn-success btn-lg">
+                🏆 Meus Bolões
+            </a>
+            <a href="{% url 'group-join' %}" class="btn btn-outline-success btn-lg">
+                🔑 Entrar em um Bolão
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

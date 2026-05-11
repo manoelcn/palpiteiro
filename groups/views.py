@@ -65,6 +65,7 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
         group_matches = self.object.matches.all()
         context['matches'] = group_matches.filter(status='TIMED')
         context['guesses'] = Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches)
+        context['guessed_match_ids'] = list(Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches).values_list('match_id', flat=True))
         
         return context
 

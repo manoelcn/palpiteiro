@@ -8,6 +8,8 @@
 </ul>
 
 <h3>Seus Palpites:</h3>
-{% for guess in guesses %}
-    <p>Jogo: {{ guess.match }} - Seu palpite: {{ guess.home_score }} x {{ guess.away_score }}</p>
-{% endfor %}
+{% if guesses %}
+    {% for guess in guesses %}
+        <p>Jogo: {{ guess.match }} - Seu palpite: {{ guess.home_score }} x {{ guess.away_score }} - <a href="{% url 'guess-update' group.pk guess.id %}">alterar palpite</a></p>
+    {% endfor %}
+{% endif %}

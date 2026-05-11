@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from guesses.models import Guess
 from guesses.forms import GuessForm
 
@@ -16,6 +16,18 @@ class GuessCreateView(LoginRequiredMixin, CreateView):
         form.instance.group_id = self.kwargs['group_pk']
         form.instance.match_id = self.kwargs['match_pk']
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('group-detail', kwargs={'pk': self.kwargs['group_pk']})
+
+
+class GuessUpdateView(LoginRequiredMixin, UpdateView):
+    model = Guess
+    template_name = 'guess_update.html'
+    form_class = GuessForm
+    
+    def get_queryset(self):
+        return Guess.objects.filter(user=self.request.user, match__status='TIMED')
     
     def get_success_url(self):
         return reverse_lazy('group-detail', kwargs={'pk': self.kwargs['group_pk']})

@@ -1,0 +1,27 @@
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-center flex-grow-1">
+                <span class="fw-bold fs-5">{{ match.home_team }}</span>
+            </div>
+            <div class="text-center px-3">
+                {% if guess %}
+                    <span class="badge bg-success fs-6">{{ guess.home_score }} x {{ guess.away_score }}</span>
+                {% else %}
+                    <span class="text-muted">vs</span>
+                {% endif %}
+            </div>
+            <div class="text-center flex-grow-1">
+                <span class="fw-bold fs-5">{{ match.away_team }}</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <small class="text-muted">{{ match.kickoff }}</small>
+            {% if guess %}
+                <a href="{% url 'guess-update' group.pk guess.id %}" class="btn btn-outline-success btn-sm">Alterar palpite</a>
+            {% else %}
+                <a href="{% url 'guess-create' group.pk match.id %}" class="btn btn-success btn-sm">Palpitar</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

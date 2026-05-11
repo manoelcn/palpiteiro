@@ -1,5 +1,21 @@
-<html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">🏆 Meus Bolões</h2>
+    {% if perms.groups.add_group %}
+        <a href="{% url 'group-create' %}" class="btn btn-success">+ Novo Bolão</a>
+    {% endif %}
+</div>
+
+{% if groups %}
     {% for group in groups %}
-        <p>{{ group.name }}</p>
+        {% include 'components/_group_card.html' with group=group %}
     {% endfor %}
-</html>
+{% else %}
+    <div class="text-center py-5">
+        <p class="text-muted fs-5">Você ainda não participa de nenhum bolão.</p>
+        <a href="{% url 'group-join' %}" class="btn btn-success">🔑 Entrar em um Bolão</a>
+    </div>
+{% endif %}
+{% endblock %}

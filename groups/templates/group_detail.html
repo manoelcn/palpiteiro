@@ -1,15 +1,39 @@
-<h3>Jogos Agendados:</h3>
-<ul>
-    {% for match in matches %}
-        <li>{{ match.home_team }} vs {{ match.away_team }} - <a href="{% url 'guess-create' group.pk match.id %}">palpitar</a></li> 
-    {% empty %}
-        <li>Sem jogos agendados</li>
-    {% endfor %}
-</ul>
+{% extends 'base.html' %}
 
-<h3>Seus Palpites:</h3>
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">🏆 {{ group.name }}</h2>
+    <div class="d-flex gap-2">
+        <span class="badge bg-success fs-6">Código: {{ group.invite_code }}</span>
+        <a href="{% url 'group-list' %}" class="btn btn-outline-secondary btn-sm">Voltar</a>
+    </div>
+</div>
+
+<h4 class="mb-3">⚽ Jogos Disponíveis</h4>
+{% if matches %}
+    {% for match in matches %}
+        <div class="card shadow-sm mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <span class="fw-bold">{{ match.home_team }} vs {{ match.away_team }}</span>
+                <a href="{% url 'guess-create' group.pk match.id %}" class="btn btn-success btn-sm">Palpitar</a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-muted">Nenhum jogo disponível para palpite.</p>
+{% endif %}
+
+<h4 class="mb-3 mt-4">🎯 Seus Palpites</h4>
 {% if guesses %}
     {% for guess in guesses %}
-        <p>Jogo: {{ guess.match }} - Seu palpite: {{ guess.home_score }} x {{ guess.away_score }} - <a href="{% url 'guess-update' group.pk guess.id %}">alterar palpite</a></p>
+        <div class="card shadow-sm mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <span>{{ guess.match.home_team }} vs {{ guess.match.away_team }} — <strong>{{ guess.home_score }} x {{ guess.away_score }}</strong></span>
+                <a href="{% url 'guess-update' group.pk guess.id %}" class="btn btn-outline-success btn-sm">Alterar</a>
+            </div>
+        </div>
     {% endfor %}
+{% else %}
+    <p class="text-muted">Você ainda não fez nenhum palpite.</p>
 {% endif %}
+{% endblock %}

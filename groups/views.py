@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DeleteView
+from django.views.generic import CreateView, ListView, DeleteView, DetailView
 from django.views.generic.edit import FormView
 from groups.models import Group, Membership
 from groups.forms import GroupForm, InviteCodeForm
+from matches.models import Match
+from guesses.models import Guess
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
@@ -50,3 +52,17 @@ class GroupLeaveView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Membership.objects.filter(user=self.request.user)
+
+
+class GroupDetailView(LoginRequiredMixin, DetailView):
+    model = Group
+    template_name = 'group_detail.html'
+    context_object_name = 'group'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        group_matches = self.object.matches.all()
+        context['matches'] = group_matches.filter(status='TIMED')
+        context['guesses'] = Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches)
+        
+        return context

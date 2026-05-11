@@ -1,7 +1,7 @@
 <h3>Jogos Agendados:</h3>
 <ul>
     {% for match in matches %}
-        <li>{{ match.home_team }} vs {{ match.away_team }}</li>
+        <li>{{ match.home_team }} vs {{ match.away_team }} - <a href="{% url 'guess-create' group.pk match.id %}">palpitar</a></li> 
     {% empty %}
         <li>Sem jogos agendados</li>
     {% endfor %}

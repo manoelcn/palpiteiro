@@ -2,9 +2,9 @@ from django.db import models
 
 
 STATUS_CHOICE = [
-    ('scheduled', 'scheduled'),
-    ('in_progress', 'in_progress'),
-    ('finished', 'finished'),
+    ('TIMED', 'TIMED'),
+    ('IN_PLAY', 'IN_PLAY'),
+    ('FINISHED', 'FINISHED'),
 ]
 
 class Match(models.Model):

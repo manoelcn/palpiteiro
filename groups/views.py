@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DeleteView, DetailView
+from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
 from django.views.generic.edit import FormView
 from groups.models import Group, Membership
 from groups.forms import GroupForm, InviteCodeForm
@@ -66,3 +66,13 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
         context['guesses'] = Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches)
         
         return context
+
+
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
+    model = Group
+    template_name = 'group_update.html'
+    form_class = GroupForm
+    success_url = reverse_lazy('group-list')
+
+    def get_queryset(self):
+        return Group.objects.filter(owner=self.request.user)

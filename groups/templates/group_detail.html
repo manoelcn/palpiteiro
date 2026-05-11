@@ -1,0 +1,13 @@
+<h3>Jogos Agendados:</h3>
+<ul>
+    {% for match in matches %}
+        <li>{{ match.home_team }} vs {{ match.away_team }}</li>
+    {% empty %}
+        <li>Sem jogos agendados</li>
+    {% endfor %}
+</ul>
+
+<h3>Seus Palpites:</h3>
+{% for guess in guesses %}
+    <p>Jogo: {{ guess.match }} - Seu palpite: {{ guess.home_score }} x {{ guess.away_score }}</p>
+{% endfor %}

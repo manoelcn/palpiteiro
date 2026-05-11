@@ -8,6 +8,7 @@ class Group(models.Model):
     name = models.CharField(max_length=100)
     invite_code = models.CharField(unique=True, max_length=5)
     owner = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='owned_groups')
+    matches = models.ManyToManyField('matches.Match', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @staticmethod

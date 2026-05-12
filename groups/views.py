@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
 from django.views.generic.edit import FormView
+from django.contrib import messages
 from groups.models import Group, Membership
 from groups.forms import GroupForm, InviteCodeForm
 from matches.models import Match
@@ -46,6 +48,9 @@ class GroupJoinView(LoginRequiredMixin, FormView):
             return super().form_valid(form)
         except Group.DoesNotExist:
             form.add_error('invite_code', 'Código inválido.')
+            return self.form_invalid(form)
+        except IntegrityError:
+            messages.error(self.request, 'Você já faz parte desse bolão.')
             return self.form_invalid(form)
 
 

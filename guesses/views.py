@@ -6,6 +6,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 from guesses.models import Guess
 from guesses.forms import GuessForm
+from matches.models import Match
 
 
 class GuessCreateView(LoginRequiredMixin, CreateView):
@@ -25,6 +26,11 @@ class GuessCreateView(LoginRequiredMixin, CreateView):
             messages.error(self.request, 'Você já fez um palpite para esse jogo!')
             return self.form_invalid(form)
     
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['match'] = Match.objects.get(pk=self.kwargs['match_pk'])
+        return kwargs
+
     def get_success_url(self):
         return reverse_lazy('group-detail', kwargs={'pk': self.kwargs['group_pk']})
 
@@ -33,6 +39,11 @@ class GuessUpdateView(LoginRequiredMixin, UpdateView):
     model = Guess
     template_name = 'guess_update.html'
     form_class = GuessForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['match'] = self.get_object().match
+        return kwargs
     
     def get_queryset(self):
         return Guess.objects.filter(user=self.request.user, match__status='TIMED')

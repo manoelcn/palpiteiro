@@ -10,10 +10,7 @@
                 <a href="{% url 'group-update' group.pk %}" class="btn btn-outline-secondary btn-sm">Editar</a>
                 <a href="{% url 'group-delete' group.pk %}" class="btn btn-outline-danger btn-sm">Excluir</a>
             {% else %}
-                <form method="post" action="{% url 'group-leave' group.my_membership.pk %}" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm">Sair</button>
-                </form>
+                <a href="{% url 'group-leave' group.my_membership.pk %}" class="btn btn-outline-danger btn-sm">Sair</a>
             {% endif %}
         </div>
     </div>

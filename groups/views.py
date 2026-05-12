@@ -55,7 +55,7 @@ class GroupLeaveView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('group-list')
 
     def get_queryset(self):
-        return Membership.objects.filter(user=self.request.user)
+        return Membership.objects.filter(user=self.request.user).exclude(group__owner=self.request.user)
 
 
 class GroupDetailView(LoginRequiredMixin, DetailView):

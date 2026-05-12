@@ -48,7 +48,7 @@ class GroupJoinView(LoginRequiredMixin, FormView):
 
 class GroupLeaveView(LoginRequiredMixin, DeleteView):
     model = Membership
-    template_name = 'group_delete.html'
+    template_name = 'group_leave.html'
     success_url = reverse_lazy('group-list')
 
     def get_queryset(self):
@@ -76,6 +76,16 @@ class GroupUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = GroupForm
     success_url = reverse_lazy('group-list')
     permission_required = 'groups.change_group'
+
+    def get_queryset(self):
+        return Group.objects.filter(owner=self.request.user)
+
+
+class GroupDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = Group
+    template_name = 'group_delete.html'
+    success_url = reverse_lazy('group-list')
+    permission_required = 'groups.delete_group'
 
     def get_queryset(self):
         return Group.objects.filter(owner=self.request.user)

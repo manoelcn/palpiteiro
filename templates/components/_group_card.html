@@ -8,6 +8,9 @@
             <a href="{% url 'group-detail' group.pk %}" class="btn btn-success btn-sm">Ver grupo</a>
             {% if user == group.owner %}
                 <a href="{% url 'group-update' group.pk %}" class="btn btn-outline-secondary btn-sm">Editar</a>
+                <a href="{% url 'group-delete' group.pk %}" class="btn btn-outline-danger btn-sm">Excluir</a>
+            {% else %}
+                <a href="{% url 'group-leave' group.memberships.get.pk %}" class="btn btn-outline-danger btn-sm">Sair</a>
             {% endif %}
         </div>
     </div>

@@ -23,4 +23,11 @@ class GroupForm(forms.ModelForm):
 
 
 class InviteCodeForm(forms.Form):
-    invite_code = forms.CharField(max_length=5)
+    invite_code = forms.CharField(
+        max_length=5,
+        label='Código do bolão',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ex: abc12',
+        })
+    )

@@ -8,6 +8,6 @@ urlpatterns = [
     path('groups/list/', GroupListView.as_view(), name='group-list'),
     path('groups/<int:pk>/', GroupDetailView.as_view(), name='group-detail'),
     path('groups/join/', GroupJoinView.as_view(), name='group-join'),
-    path('groups/leave/<int:pk>', GroupLeaveView.as_view(), name='group-leave'),
+    path('groups/leave/<int:pk>/', GroupLeaveView.as_view(), name='group-leave'),
     path('groups/<int:pk>/delete/', GroupDeleteView.as_view(), name='group-delete'),
 ]

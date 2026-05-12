@@ -28,7 +28,10 @@ class GroupListView(LoginRequiredMixin, ListView):
     context_object_name = 'groups'
 
     def get_queryset(self):
-        return Group.objects.filter(memberships__user=self.request.user)
+        groups = Group.objects.filter(memberships__user=self.request.user)
+        for group in groups:
+            group.my_membership = group.memberships.filter(user=self.request.user).first()
+        return groups
 
 
 class GroupJoinView(LoginRequiredMixin, FormView):

@@ -6,6 +6,20 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ['name', 'matches']
+        labels = {
+            'name': 'Nome do bolão',
+            'matches': 'Partidas',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ex: Bolão da Família',
+            }),
+            'matches': forms.SelectMultiple(attrs={
+                'class': 'form-select',
+                'size': '8',
+            }),
+        }
 
 
 class InviteCodeForm(forms.Form):

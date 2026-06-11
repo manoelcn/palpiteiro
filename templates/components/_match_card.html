@@ -1,27 +1,31 @@
 <div class="card shadow-sm mb-3">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="text-center flex-grow-1">
-                <span class="fw-bold fs-5">{{ match.home_team }}</span>
+        <div class="row align-items-center mb-3 text-center">
+            <div class="col-4 px-1">
+                <span class="fw-bold fs-6 fs-md-5">{{ match.home_team }}</span>
             </div>
-            <div class="text-center px-3">
+            <div class="col-4 px-1">
                 {% if guess %}
-                    <span class="badge bg-success fs-6">{{ guess.home_score }} x {{ guess.away_score }}</span>
+                    <span class="badge bg-success fs-5 px-3 py-2">{{ guess.home_score }} x {{ guess.away_score }}</span>
                 {% else %}
-                    <span class="text-muted">vs</span>
+                    <span class="text-muted fs-5">VS</span>
                 {% endif %}
             </div>
-            <div class="text-center flex-grow-1">
-                <span class="fw-bold fs-5">{{ match.away_team }}</span>
+            <div class="col-4 px-1">
+                <span class="fw-bold fs-6 fs-md-5">{{ match.away_team }}</span>
             </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <small class="text-muted">{{ match.kickoff }}</small>
-            {% if guess %}
-                <a href="{% url 'guess-update' group.pk guess.id %}" class="btn btn-outline-success btn-sm">Alterar palpite</a>
-            {% else %}
-                <a href="{% url 'guess-create' group.pk match.id %}" class="btn btn-success btn-sm">Palpitar</a>
-            {% endif %}
+        
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 mt-2 pt-3 border-top">
+            <small class="text-muted mb-2 mb-sm-0">{{ match.kickoff|date:"d/m/Y H:i" }}</small>
+            
+            <div class="w-100 text-sm-end">
+                {% if guess %}
+                    <a href="{% url 'guess-update' group.pk guess.id %}" class="btn btn-outline-success btn-sm w-100 w-sm-auto">Alterar palpite</a>
+                {% else %}
+                    <a href="{% url 'guess-create' group.pk match.id %}" class="btn btn-success btn-sm w-100 w-sm-auto">Palpitar</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

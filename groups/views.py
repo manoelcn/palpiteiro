@@ -73,11 +73,21 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        group_matches = self.object.matches.all()
-        context['matches'] = group_matches.filter(status='TIMED')
-        context['guesses'] = Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches)
-        context['guessed_match_ids'] = list(Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches).values_list('match_id', flat=True))
+        group_matches = self.object.matches.all().order_by('kickoff')
         
+        context['matches'] = group_matches.filter(status='TIMED')
+        
+        guesses = Guess.objects.filter(user=self.request.user, group=self.object, match__in=group_matches)
+        context['guesses'] = guesses
+        context['guessed_match_ids'] = list(guesses.values_list('match_id', flat=True))
+        
+        past_matches = group_matches.exclude(status='TIMED').order_by('-kickoff')
+        
+        guesses_dict = {guess.match_id: guess for guess in guesses}
+        for match in past_matches:
+            match.user_guess = guesses_dict.get(match.id)
+            
+        context['past_matches'] = past_matches
         return context
 
 

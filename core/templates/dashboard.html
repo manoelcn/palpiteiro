@@ -30,31 +30,61 @@
     </div>
 </div>
 
-<h4 class="fw-bold mb-3">🏆 Ranking de Bolões</h4>
-<div class="card shadow-sm">
-    <table class="table table-hover mb-0">
-        <thead class="table-success">
-            <tr>
-                <th>Bolão</th>
-                <th>Dono</th>
-                <th class="text-center">Participantes</th>
-                <th class="text-center">Código</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for group in groups %}
-            <tr>
-                <td class="fw-bold">{{ group.name }}</td>
-                <td>{{ group.owner.username }}</td>
-                <td class="text-center">{{ group.total_members }}</td>
-                <td class="text-center"><span class="badge bg-success">{{ group.invite_code }}</span></td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" class="text-center text-muted py-4">Nenhum bolão criado ainda.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="row g-4 mb-4">
+    
+    <div class="col-lg-8">
+        <h4 class="fw-bold mb-3">🏆 Ranking de Bolões</h4>
+        <div class="card shadow-sm h-100"> <div class="table-responsive mb-0"> <table class="table table-hover mb-0">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Bolão</th>
+                            <th>Dono</th>
+                            <th class="text-center">Participantes</th>
+                            <th class="text-center">Código</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in groups %}
+                        <tr>
+                            <td class="fw-bold">{{ group.name }}</td>
+                            <td>{{ group.owner.username }}</td>
+                            <td class="text-center">{{ group.total_members }}</td>
+                            <td class="text-center"><span class="badge bg-success">{{ group.invite_code }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan=\"4\" class="text-center text-muted py-4">Nenhum bolão criado ainda.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <h4 class="fw-bold mb-3">👥 Usuários Registrados</h4>
+        <div class="card shadow-sm h-100">
+            <ul class="list-group list-group-flush">
+                {% for u in active_users_list %}
+                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                    <div>
+                        <span class="fw-bold d-block">{{ u.username }}</span>
+                        <small class="text-muted">Membro desde: {{ u.date_joined|date:"d/m/y" }}</small>
+                    </div>
+                    
+                    {% if u.is_staff %}
+                        <span class="badge bg-primary rounded-pill">Admin</span>
+                    {% else %}
+                        <span class="badge bg-success rounded-pill">Ativo</span>
+                    {% endif %}
+                </li>
+                {% empty %}
+                <li class="list-group-item text-center text-muted py-4">Nenhum usuário encontrado.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

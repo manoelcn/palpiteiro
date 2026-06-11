@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView
 from accounts.models import CustomUser
@@ -19,13 +19,17 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         return self.request.user.is_staff
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['total_users_active'] = CustomUser.objects.filter(is_active=True).count()
-        context['total_groups'] = Group.objects.count()
-        context['total_guesses'] = Guess.objects.count()
-        context['matches_finished'] = Match.objects.filter(status='FINISHED').count()
-        context['groups'] = Group.objects.select_related('owner').annotate(
-            total_members=Count('memberships')
-        ).order_by('-total_members')
-        
-        return context
+            context = super().get_context_data(**kwargs)
+            context['total_users_active'] = CustomUser.objects.filter(is_active=True).count()
+            context['total_groups'] = Group.objects.count()
+            context['total_guesses'] = Guess.objects.count()
+            context['matches_finished'] = Match.objects.filter(status='FINISHED').count()
+            context['groups'] = Group.objects.select_related('owner').annotate(
+                total_members=Count(
+                    'memberships', 
+                    filter=Q(memberships__user__is_staff=False, memberships__user__is_superuser=False)
+                )
+            ).order_by('-total_members')            
+            context['active_users_list'] = CustomUser.objects.filter(is_active=True).order_by('-date_joined')
+            
+            return context

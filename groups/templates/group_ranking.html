@@ -1,29 +1,37 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-    <h2>Ranking do Bolão: {{ group.name }}</h2>
+{% extends 'base.html' %} 
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Posição</th>
-                <th>Participante</th>
-                <th>Pontuação</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for member in ranking %}
-            <tr>
-                <td>{{ forloop.counter }}º</td>
-                <td>{{ member.user.username }}</td> <td>{{ member.total_points }} pts</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">Nenhum membro encontrado neste grupo.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+{% block content %}
+<div class="container px-0 px-md-3"> <h2 class="fw-bold mb-4 text-center text-md-start">Ranking: {{ group.name }}</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="table-responsive mb-0">
+            <table class="table table-hover mb-0 text-center align-middle">
+                <thead class="table-success">
+                    <tr>
+                        <th class="py-3">Posição</th>
+                        <th class="py-3 text-start">Participante</th>
+                        <th class="py-3">Pontuação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in ranking %}
+                    <tr>
+                        <td class="fw-bold fs-5 text-muted">{{ forloop.counter }}º</td>
+                        <td class="text-start fw-semibold">{{ member.user.username }}</td> 
+                        <td><span class="badge bg-primary fs-6">{{ member.total_points }} pts</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="py-4 text-muted">Nenhum membro encontrado neste grupo.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     
-    <a href="{% url 'group-detail' group.pk %}" class="btn btn-secondary">Voltar para o Grupo</a>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a href="{% url 'group-detail' group.pk %}" class="btn btn-outline-secondary">Voltar para o Grupo</a>
+    </div>
 </div>
 {% endblock %}

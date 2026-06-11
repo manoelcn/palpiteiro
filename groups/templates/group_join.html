@@ -10,11 +10,14 @@
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}
-                        {% include 'components/_form_field.html' with field=field %}
+                    {% include 'components/_form_field.html' with field=field %}
                     {% endfor %}
-                    <div class="d-flex gap-2 mt-3">
-                        <button type="submit" class="btn btn-success">Entrar</button>
-                        <a href="{% url 'group-list' %}" class="btn btn-outline-secondary">Cancelar</a>
+
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                        <button type="submit" class="btn btn-success w-100">Entrar</button>
+                        <a href="{% url 'group-list' %}"
+                            class="btn btn-outline-secondary w-100 text-center">Cancelar</a>
                     </div>
                 </form>
             </div>

@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from django.core.management import call_command
 import requests
 import json
 from app.settings import FOOTBALL_API_KEY
@@ -30,5 +29,3 @@ class Command(BaseCommand):
                 )
                 count += 1
         self.stdout.write(f'{count} jogos sincronizados com sucesso!')
-        self.stdout.write('Calculando pontos dos palpites...')
-        call_command('calculate_points')

@@ -1,45 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="fw-bold mb-4">📊 Dashboard</h2>
+<h2 class="fw-bold mb-4">📊 Dashboard Administrativo</h2>
 
 <div class="row g-4 mb-5">
-    <div class="col-md-4">
-        <div class="card shadow-sm text-center p-4">
-            <h1 class="display-4 fw-bold text-success">{{ total_users_active }}</h1>
-            <p class="text-muted mb-0">Usuários ativos</p>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-start border-success border-4">
+            <h2 class="display-5 fw-bold text-success">{{ total_users_active }}</h2>
+            <p class="text-muted mb-0">Usuários Ativos</p>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm text-center p-4">
-            <h1 class="display-4 fw-bold text-success">{{ total_groups }}</h1>
-            <p class="text-muted mb-0">Bolões criados</p>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-start border-primary border-4">
+            <h2 class="display-5 fw-bold text-primary">{{ total_groups }}</h2>
+            <p class="text-muted mb-0">Bolões Criados</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-start border-warning border-4">
+            <h2 class="display-5 fw-bold text-warning">{{ total_guesses }}</h2>
+            <p class="text-muted mb-0">Palpites Registrados</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-start border-secondary border-4">
+            <h2 class="display-5 fw-bold text-secondary">{{ matches_finished }}</h2>
+            <p class="text-muted mb-0">Jogos Encerrados</p>
         </div>
     </div>
 </div>
 
-<h4 class="fw-bold mb-3">🏆 Bolões e participantes</h4>
+<h4 class="fw-bold mb-3">🏆 Ranking de Bolões</h4>
 <div class="card shadow-sm">
     <table class="table table-hover mb-0">
         <thead class="table-success">
             <tr>
                 <th>Bolão</th>
                 <th>Dono</th>
-                <th>Participantes</th>
-                <th>Código</th>
+                <th class="text-center">Participantes</th>
+                <th class="text-center">Código</th>
             </tr>
         </thead>
         <tbody>
             {% for group in groups %}
             <tr>
-                <td>{{ group.name }}</td>
+                <td class="fw-bold">{{ group.name }}</td>
                 <td>{{ group.owner.username }}</td>
-                <td>{{ group.total_members }}</td>
-                <td><span class="badge bg-success">{{ group.invite_code }}</span></td>
+                <td class="text-center">{{ group.total_members }}</td>
+                <td class="text-center"><span class="badge bg-success">{{ group.invite_code }}</span></td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4" class="text-center text-muted">Nenhum bolão criado ainda.</td>
+                <td colspan="4" class="text-center text-muted py-4">Nenhum bolão criado ainda.</td>
             </tr>
             {% endfor %}
         </tbody>

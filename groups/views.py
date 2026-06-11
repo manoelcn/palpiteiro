@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.db import IntegrityError
+from django.db.models import Sum, Q
+from django.db.models.functions import Coalesce
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
@@ -97,3 +100,34 @@ class GroupDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Group.objects.filter(owner=self.request.user)
+
+
+class GroupRankingView(LoginRequiredMixin, ListView):
+    model = Membership
+    template_name = 'group_ranking.html'
+    context_object_name = 'ranking'
+
+    def get_queryset(self):
+        group_id = self.kwargs.get('pk')
+        queryset = Membership.objects.filter(
+            group_id=group_id
+        ).exclude(
+            user__is_staff=True
+        ).exclude(
+            user__is_superuser=True
+        ).annotate(
+            total_points=Coalesce(
+                Sum(
+                    'user__guesses__points', 
+                    filter=Q(user__guesses__group_id=group_id)
+                ), 
+                0
+            )
+        ).order_by('-total_points')
+        
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group'] = get_object_or_404(Group, pk=self.kwargs.get('pk'))
+        return context

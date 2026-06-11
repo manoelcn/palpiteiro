@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <h2>Ranking do Bolão: {{ group.name }}</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Posição</th>
+                <th>Participante</th>
+                <th>Pontuação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in ranking %}
+            <tr>
+                <td>{{ forloop.counter }}º</td>
+                <td>{{ member.user.username }}</td> <td>{{ member.total_points }} pts</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">Nenhum membro encontrado neste grupo.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <a href="{% url 'group-detail' group.pk %}" class="btn btn-secondary">Voltar para o Grupo</a>
+</div>
+{% endblock %}
